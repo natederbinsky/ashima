@@ -41,6 +41,17 @@ img
 	font-size: 10px;
 }
 
+#content #footer
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-style: italic;
+	color: black;
+	
+	clear: both;
+	padding: 20px 0px 5px 0px;
+}
+
 #content #title
 {
 	font-size: 24px;
