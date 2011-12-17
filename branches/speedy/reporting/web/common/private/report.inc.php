@@ -139,8 +139,13 @@
 			
 			$temp['data'][ $x ][ $set ] = $y;
 			
-			// maintain stats
+			// maintain stats			
 			{
+				if ( is_array( $y ) )
+				{
+					$y = $y[0];
+				}
+				
 				if ( is_null( $return_val['stats']['y-min'] ) || ( $return_val['stats']['y-min'] > $y ) )
 				{
 					$return_val['stats']['y-min'] = $y;
@@ -154,7 +159,7 @@
 		}
 		
 		// returns phplot-friendly data array
-		public static function convert_data( &$table, $x_field, $x_category, $y_field, $set_field = NULL )
+		public static function convert_data( &$table, $x_field, $x_category, $y_field, $set_field = NULL, $err_field = NULL )
 		{
 			$temp = array( 'sets'=>array(), 'data'=>array() );
 			$return_val = array( 
@@ -177,17 +182,27 @@
 						$x = strval( $row[ $x_field ] );
 						$y = $row[ $set ];
 						
+						if ( !is_null( $err_field ) )
+						{
+							$y = array( $y, doubleval( $row[ $err_field ] ), doubleval( $row[ $err_field ] ) );
+						}
+						
 						report_data::_convert_datum( $x, $y, $set, $x_category, $temp, $return_val );
 					}
 				}
 			}
 			else
-			{
+			{				
 				foreach ( $table as $row )
 				{
-					$set = ( ( is_null( $set_field ) )?( 'uniform' ):( $row[ $set_field ] ) );
+					$set = strval( ( is_null( $set_field ) )?( 'uniform' ):( $row[ $set_field ] ) );
 					$x = strval( $row[ $x_field ] );
 					$y = $row[ $y_field ];
+					
+					if ( !is_null( $err_field ) )
+					{
+						$y = array( $y, doubleval( $row[ $err_field ] ), doubleval( $row[ $err_field ] ) );
+					}
 					
 					report_data::_convert_datum( $x, $y, $set, $x_category, $temp, $return_val );
 				}
@@ -200,7 +215,14 @@
 				{
 					if ( !isset( $row[ $set_name ] ) )
 					{
-						$temp['data'][ $x ][ $set_name ] = ''; 
+						if ( is_null( $err_field ) )
+						{
+							$temp['data'][ $x ][ $set_name ] = ''; 
+						}
+						else
+						{
+							$temp['data'][ $x ][ $set_name ] = array( '', '', '' );
+						}
 					}
 				}
 			}
@@ -235,7 +257,17 @@
 					
 					foreach ( $row as $y )
 					{
-						$phplot_row[] = $y;
+						if ( is_array( $y ) )
+						{
+							foreach ( $y as $yy )
+							{
+								$phplot_row[] = $yy;
+							}
+						}
+						else
+						{
+							$phplot_row[] = $y;
+						}
 					}
 					
 					$return_val['data'][] = $phplot_row;
@@ -259,7 +291,7 @@
 		}
 	
 		
-		public function convert_set_data( $id, $x_field, $x_category, $y_field, $set_field = NULL )
+		public function convert_set_data( $id, $x_field, $x_category, $y_field, $set_field = NULL, $err_field = NULL )
 		{
 			$return_val = NULL;
 			
@@ -267,7 +299,7 @@
 			{
 				$my_data = $this->get_data( $id );
 				
-				$return_val = report_data::convert_data( $my_data, $x_field, $x_category, $y_field, $set_field );
+				$return_val = report_data::convert_data( $my_data, $x_field, $x_category, $y_field, $set_field, $err_field );
 			}
 			
 			return $return_val;
