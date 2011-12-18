@@ -9,11 +9,11 @@
 ?>
 
 	<?php
-		$exps = exp_list();
-		
 		// tabs -> experiment -> (file->title)
 		$reports = array();
 		@include( 'index.inc.php' );
+		
+		$exps = exp_list();
 		
 		if ( !empty( $reports ) )
 		{
