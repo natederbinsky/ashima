@@ -21,27 +21,12 @@
 	$page_info['title'] = '';
 	$page_info['align'] = 'left';
 	$page_info['head'] = '';
-	
-	$page_info['nav'] = 'hola';
-	{
-		$nav_info = array(
-			array( 'title'=>'experiments', 'url'=>'experiments.php' ),
-		);
-		@include( 'nav-config.inc.php' );
 		
-		if ( !empty( $nav_info ) )
-		{
-			foreach ( $nav_info as $key => $val )
-			{
-				$nav_info[ $key ] = ( '<a href="' . htmlentities( $val['url'] ) . '"' . ( ( isset( $val['new'] ) )?( ' target="_blank"' ):('') ) . '>' . htmlentities( $val['title'] ) . '</a>' );
-			}
-			
-			$page_info['nav'] .= ( ' - ' . implode( ' | ', $nav_info ) );
-		}
-	}
-		
-	// currently supported: full, blank
+	// supported: full, blank
 	$page_info['type'] = 'full';
+	
+	// supported: non-negative integers
+	$page_info['depth'] = 0;
 	
 	ob_start();
 ?>
