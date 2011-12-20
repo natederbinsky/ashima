@@ -6,6 +6,9 @@
 	//ini_set( 'display_errors', 'On' );
 	//ini_set( 'display_startup_errors', 'On' );
 	
+	// quell warnings
+	date_default_timezone_set( 'America/Detroit' );
+	
 	// required libraries
 	require_once 'db.inc.php';
 	require_once 'auth.inc.php';
