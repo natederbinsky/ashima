@@ -1,0 +1,6 @@
+#summary Getting Started
+#labels Featured
+
+= Video =
+
+<wiki:video url="http://www.youtube.com/watch?v=PKdtPKn8F_c"/>
