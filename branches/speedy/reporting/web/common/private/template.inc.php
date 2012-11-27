@@ -5,15 +5,12 @@
 		
 		<link href="{homedir}common/public/speedy.css" rel="stylesheet" type="text/css" media="all" />
 		<link rel="shortcut icon" href="{homedir}common/public/favico.ico" >
+
+		<script type="text/javascript" src="{homedir}common/public/jquery/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="{homedir}common/public/jquery/jquery-ui-1.9.2.custom.min.js"></script>
 		
-		<link type="text/css" href="{homedir}common/public/jquery/jquery-ui-1.8.5.custom.css" rel="Stylesheet" />
+		<link type="text/css" href="{homedir}common/public/jquery/jquery-ui-1.9.2.custom.min.css" rel="Stylesheet" />
 		<link type="text/css" href="{homedir}common/public/shjs/sh_style.css" rel="Stylesheet" />
-		
-		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-		<script type="text/javascript">
-			google.load( "jquery", "1.4" );
-			google.load( "jqueryui", "1.8" );
-		</script>
 		
 		<script type="text/javascript" src="{homedir}common/public/shjs/sh_main.min.js"></script>
 		<script type="text/javascript" src="{homedir}common/public/shjs/sh_sql.min.js"></script>
