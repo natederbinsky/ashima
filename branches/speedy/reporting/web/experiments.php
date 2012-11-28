@@ -139,19 +139,35 @@
 									if ( count( $schema ) == count( $values ) )
 									{
 										$res = exp_add_datum( $exp_id, $values );
+										$output = 'INVALID DATA';
 										
-										echo '<div class="section">';
-											echo '<div class="body">';
-												if ( !is_null( $res ) )
-												{
-													echo ( '<p class="ui-state-highlight">ADDED DATUM ' . htmlentities( $res ) . ' TO EXPERIMENT ' . htmlentities( $exp_id ) . '</p>' );
-												}
-												else
-												{
-													echo '<p class="ui-state-error">INVALID DATA</p>';
-												}
+										if ( !is_null( $res ) )
+										{
+											$output = ( 'ADDED DATUM ' . htmlentities( $res ) . ' TO EXPERIMENT ' . htmlentities( $exp_id ) );
+											$res = true;
+										}
+										else
+										{
+											$res = false;
+										}
+										
+										if ( $page_info['type'] == 'blank' )
+										{
+											echo $output;
+										}
+										else
+										{
+											echo '<div class="section">';
+												echo '<div class="body">';
+													echo ( '<p class="' . ( ( $res )?( 'ui-state-highlight' ):( 'ui-state-error' ) ) . '">' . $output . '</p>' );
+												echo '</div>';
 											echo '</div>';
-										echo '</div>';
+										}
+										
+										if ( $page_info['type'] == 'blank' )
+										{
+											$show_forms = false;
+										}
 									}
 								}
 							}

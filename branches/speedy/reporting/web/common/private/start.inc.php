@@ -26,7 +26,7 @@
 	$page_info['head'] = '';
 		
 	// supported: full, blank
-	$page_info['type'] = 'full';
+	$page_info['type'] = ( isset( $_GET['blank'] ) && ( $_GET['blank'] === 'Y' ) )?( 'blank' ):( 'full' );
 	
 	// supported: non-negative integers
 	$page_info['depth'] = 0;
