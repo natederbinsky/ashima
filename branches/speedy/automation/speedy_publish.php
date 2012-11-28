@@ -35,7 +35,7 @@
 		$datum = preg_split( '/\s+/' , $datum );
 		
 		// break into key/value
-		$vars = array( 'cmd'=>'data', 'exp_id'=>$exp_id );
+		$vars = array( 'blank'=>'Y', 'cmd'=>'data', 'exp_id'=>$exp_id );
 		foreach ( $datum as $key => $val )
 		{
 			$temp = explode( '=', $val );
