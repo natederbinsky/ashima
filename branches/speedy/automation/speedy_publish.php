@@ -20,13 +20,8 @@
 	}
 	$exp_id = intval( $argv[1] );
 	$debug_mode = ( $argc == 3 );
-	
-	// data comes from standard in
-	$in = file( 'php://stdin' );
-	
-	//
-	
-	foreach ( $in as $ct => $datum )
+		
+	while ( $datum = fgets( STDIN ) )
 	{
 		// kill extra white
 		$datum = trim( $datum );
@@ -54,6 +49,7 @@
 		}
 		else
 		{
+            
 			$curl_session = curl_init();
 	
 			curl_setopt( $curl_session, CURLOPT_URL, $datum );
@@ -65,7 +61,10 @@
 			curl_close( $curl_session );
 			
 			echo ( ( $success )?('success'):('failure') );
+            
 		}		
 		echo "\n";
+        
 	}
+    
 ?>
