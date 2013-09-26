@@ -1,7 +1,7 @@
 <?php
 	
 	// CONFIG: assumes final slash
-	define( 'SPEEDY_BASE_URL', 'http://domain/path/to/speedy/' );
+	define( 'SPEEDY_BASE_URL', 'http://JMacPro.local/~nate/data/' );
 	$add_url = ( SPEEDY_BASE_URL . 'experiments.php' );
 	
 	//
@@ -21,6 +21,7 @@
 	$exp_id = intval( $argv[1] );
 	$debug_mode = ( $argc == 3 );
 		
+	$ct = 0;
 	while ( $datum = fgets( STDIN ) )
 	{
 		// kill extra white
@@ -42,7 +43,7 @@
 		$datum = ( $add_url . '?' . http_build_query( $datum ) );
 		
 		// status
-		echo ( 'Datum ' . ( $ct + 1 ) . '... ' );
+		echo ( 'Datum ' . ( ++$ct ) . '... ' );
 		if ( $debug_mode )
 		{
 			echo $datum;
