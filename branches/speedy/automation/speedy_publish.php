@@ -1,7 +1,7 @@
 <?php
 	
 	// CONFIG: assumes final slash
-	define( 'SPEEDY_BASE_URL', 'http://JMacPro.local/~nate/data/' );
+	define( 'SPEEDY_BASE_URL', 'http://domain/path/to/speedy/' );
 	$add_url = ( SPEEDY_BASE_URL . 'experiments.php' );
 	
 	//
