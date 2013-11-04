@@ -13,7 +13,7 @@ img
 #content .body a, a
 {
     text-decoration: none;
-    color: #cc0000;
+    color: #00c;
 }
 
 #content .body a:hover, a:hover
@@ -33,12 +33,25 @@ img
 
 #content #header
 {
+	font-family: Arial, sans-serif;
 	padding-bottom: 30px;
+}
+
+#content #header .title
+{
+	font-size: 32px;
+	font-weight: bold;
+}
+
+#content #header .title a
+{
+	text-decoration: none;
+	color: #666;
 }
 
 #content #header .nav
 {
-	font-size: 10px;
+	font-size: 11px;
 }
 
 #content #footer

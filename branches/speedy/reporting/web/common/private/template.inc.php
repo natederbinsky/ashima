@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Speedy {dash_title}</title>
+		<title>ashima {dash_title}</title>
 		
 		<link href="{homedir}common/public/speedy.css" rel="stylesheet" type="text/css" media="all" />
-		<link rel="shortcut icon" href="{homedir}common/public/favico.ico" >
+		<link rel="shortcut icon" href="{homedir}common/public/favicon.ico" >
 
 		<script type="text/javascript" src="{homedir}common/public/jquery/jquery-1.8.3.min.js"></script>
 		<script type="text/javascript" src="{homedir}common/public/jquery/jquery-ui-1.9.2.custom.min.js"></script>
@@ -24,8 +24,18 @@
 		<div id="content">
 			
 			<div id="header">
-				<div style="text-align: {align}"><a href="{homedir}index.php"><img src="{homedir}common/public/logo.png" /></a></div>
-				<div style="text-align: {align}" class="nav">&nbsp;{nav}</div>
+				<table>
+					<tbody>
+						<tr>
+							<td rowspan="2"><a href="{homedir}index.php"><img height="60" width="60" src="{homedir}common/public/logo.png" /></a></td>
+							<td class="title"><a href="{homedir}index.php">ashima</a></td>
+						</tr>
+						<tr>
+							<td class="nav">{nav}</td>
+						</tr>
+
+					</tbody>
+				</table>
 			</div>
 			
 			<div id="title">

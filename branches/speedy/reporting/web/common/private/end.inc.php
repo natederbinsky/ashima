@@ -25,7 +25,7 @@
 		$page_info['homedir'] .= ( '..' . DIRECTORY_SEPARATOR );
 	}
 	$page_info['dash_title'] = ( ( strlen( $page_info['title'] ) )?( '- ' . $page_info['title'] ):( '' ) );
-	$page_info['nav'] = 'hola';
+	$page_info['nav'] = 'howdy';
 	{
 		$nav_info = array(
 			array( 'title'=>'experiments', 'url'=>( $page_info['homedir'] . 'experiments.php' ) ),

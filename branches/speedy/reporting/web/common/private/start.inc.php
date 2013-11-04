@@ -7,7 +7,7 @@
 	//ini_set( 'display_startup_errors', 'On' );
 	
 	// quell warnings
-	date_default_timezone_set( 'America/Detroit' );
+	date_default_timezone_set( 'America/New_York' );
 	
 	// required libraries
 	require_once 'db.inc.php';
