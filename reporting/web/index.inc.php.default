@@ -18,8 +18,8 @@
 					 
 		'Science!' => array(
 			'Resources' => array(
-				'http://scholar.google.com' => 'Google Scholar',
-				'http://soar.googlecode.com' => 'Soar',
+				'https://scholar.google.com' => 'Google Scholar',
+				'https://github.com/SoarGroup/Soar' => 'Soar',
 			),
 		),
 
