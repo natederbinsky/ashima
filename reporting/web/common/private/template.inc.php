@@ -49,7 +49,7 @@
 			<div id="footer">
 				Last updated on <?php echo htmlentities( date( 'j F Y', filemtime( $_SERVER['SCRIPT_FILENAME'] ) ) . '.' . "\n" ); ?>
 				<br />
-				Powered by <a href="http://ashima.googlecode.com" target="_blank">ashima</a>.
+				Powered by <a href="https://github.com/natederbinsky/ashima" target="_blank">ashima</a>.
 			</div>
 		</div>
 	</body>

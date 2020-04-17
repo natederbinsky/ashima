@@ -52,5 +52,5 @@
 	// output the page
 	echo trim( $template );
 	
-	mysql_close( $db );
+	mysqli_close( $db );
 ?>

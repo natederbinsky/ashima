@@ -86,8 +86,8 @@
 					global $db;
 					
 					$this->data[ $id ]['table'] = array();
-					$res = @mysql_query( $this->data[ $id ]['sql'], $db );
-					while ( $row = mysql_fetch_assoc( $res ) )
+					$res = @mysqli_query( $db, $this->data[ $id ]['sql'] );
+					while ( $row = mysqli_fetch_assoc( $res ) )
 					{
 						foreach ( $this->data[ $id ]['schema'] as $k => $v )
 						{
@@ -192,7 +192,7 @@
 				}
 			}
 			else
-			{				
+			{		
 				foreach ( $table as $row )
 				{
 					$set = strval( ( is_null( $set_field ) )?( 'uniform' ):( $row[ $set_field ] ) );

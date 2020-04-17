@@ -28,13 +28,21 @@
 	}
 	
 	function exp_sql_2_type( $type )
-	{		
+	{
 		switch ( $type )
 		{
-			case ( 'int' ): return EXP_TYPE_INT;
-			case ( 'real' ): return EXP_TYPE_DOUBLE;
-			case ( 'string' ): return EXP_TYPE_STRING;
-			case ( 'blob' ): return EXP_TYPE_STRING;
+			case ( 'int' ): 
+			case ( 3 ):
+				return EXP_TYPE_INT;
+
+			case ( 'real' ): 
+			case ( 5 ):
+				return EXP_TYPE_DOUBLE;
+			
+			case ( 'string' ):
+			case ( 'blob' ): 
+			case ( 252 ):
+				return EXP_TYPE_STRING;
 		}
 	}
 	
@@ -52,9 +60,9 @@
 		{
 			$table_name = _exp_table_name( $exp_id, false );
 			
-			$res = mysql_query( 'SELECT field_name FROM exp_schemas WHERE exp_id=' . db_quote_smart( $exp_id, $db ) . ' AND field_name=' . db_quote_smart( strval( $field_name ), $db ), $db );
+			$res = mysqli_query( $db, 'SELECT field_name FROM exp_schemas WHERE exp_id=' . db_quote_smart( $exp_id, $db ) . ' AND field_name=' . db_quote_smart( strval( $field_name ), $db ) );
 			
-			if ( mysql_num_rows( $res ) == 1 )
+			if ( mysqli_num_rows( $res ) == 1 )
 			{
 				$return_val = true;
 			}
@@ -72,11 +80,11 @@
 		// ensure valid experiment
 		if ( _exp_valid( $exp_id ) && _exp_valid_field( $exp_id, $field_name, false ) )
 		{
-			$res = mysql_query( 'SELECT COUNT(DISTINCT(' . _exp_field_name( strval( $field_name ) ) . ')) AS ct FROM ' . _exp_table_name( $exp_id, false ), $db );
+			$res = mysqli_query( $db, 'SELECT COUNT(DISTINCT(' . _exp_field_name( strval( $field_name ) ) . ')) AS ct FROM ' . _exp_table_name( $exp_id, false ) );
 			
-			if ( mysql_num_rows( $res ) == 1 )
+			if ( mysqli_num_rows( $res ) == 1 )
 			{
-				$res = mysql_fetch_assoc( $res );
+				$res = mysqli_fetch_assoc( $res );
 				
 				$return_val = intval( $res['ct'] );
 			}
@@ -94,10 +102,10 @@
 		// ensure valid experiment
 		if ( _exp_valid( $exp_id ) && _exp_valid_field( $exp_id, $field_name, false ) )
 		{
-			$res = mysql_query( 'SELECT (' . _exp_field_name( strval( $field_name ) ) . ') AS dist, COUNT(*) AS ct FROM ' . _exp_table_name( $exp_id, false ) . ' GROUP BY ' . _exp_field_name( strval( $field_name ) ) . ' ORDER BY ct DESC, ' . _exp_field_name( strval( $field_name ) ) . ' ASC', $db );
+			$res = mysqli_query( $db, 'SELECT (' . _exp_field_name( strval( $field_name ) ) . ') AS dist, COUNT(*) AS ct FROM ' . _exp_table_name( $exp_id, false ) . ' GROUP BY ' . _exp_field_name( strval( $field_name ) ) . ' ORDER BY ct DESC, ' . _exp_field_name( strval( $field_name ) ) . ' ASC' );
 			
 			$return_val = array();
-			while ( $row = mysql_fetch_assoc( $res ) )
+			while ( $row = mysqli_fetch_assoc( $res ) )
 			{
 				$return_val[] = $row['dist'];
 			}
@@ -115,13 +123,13 @@
 	{
 		global $db;
 		
-		if ( mysql_query( 'INSERT INTO experiments (exp_name) VALUES (' . db_quote_smart( strval( $name ), $db ) . ')', $db ) === false )
+		if ( mysqli_query( $db, 'INSERT INTO experiments (exp_name) VALUES (' . db_quote_smart( strval( $name ), $db ) . ')' ) === false )
 		{
 			return NULL;			
 		}  
 		else
 		{
-			return mysql_insert_id();
+			return mysqli_insert_id();
 		}
 	}
 	
@@ -131,7 +139,7 @@
 		global $db;		
 		$exp_id = intval( $exp_id );
 		
-		return ( mysql_num_rows( mysql_query( 'SELECT exp_id FROM experiments WHERE exp_id=' . db_quote_smart( $exp_id, $db ), $db ) ) == 1 );
+		return ( mysqli_num_rows( mysqli_query( $db, 'SELECT exp_id FROM experiments WHERE exp_id=' . db_quote_smart( $exp_id, $db ) ) ) == 1 );
 	}
 	
 	// return: experiment table name on success, NULL on invalid experiment number
@@ -160,10 +168,10 @@
 		global $db;
 		
 		// clear old schema
-		mysql_query( 'DELETE FROM exp_schemas WHERE exp_id=' . db_quote_smart( $exp_id, $db ), $db );
+		mysqli_query( $db, 'DELETE FROM exp_schemas WHERE exp_id=' . db_quote_smart( $exp_id, $db ) );
 		
 		// clear old table
-		mysql_query( 'DROP TABLE ' . _exp_table_name( $exp_id, false ) );
+		mysqli_query( $db, 'DROP TABLE ' . _exp_table_name( $exp_id, false ) );
 	}
 	
 	// input: experiment id, array ( field name => type )
@@ -221,16 +229,16 @@
 			{
 				// schema table
 				{
-					mysql_query( 'INSERT INTO exp_schemas (exp_id,field_id,field_name,field_type) VALUES ' . implode( ',', $table_values ) );
+					mysqli_query( $db, 'INSERT INTO exp_schemas (exp_id,field_id,field_name,field_type) VALUES ' . implode( ',', $table_values ) );
 				}
 				
 				// data table
 				{
-					mysql_query( 'CREATE TABLE ' . $table_name . '(' . PRIMARY_KEY . ' INT PRIMARY KEY AUTO_INCREMENT,' . implode( ',', $schema_values ) . ')' );
+					mysqli_query( $db, 'CREATE TABLE ' . $table_name . '(' . PRIMARY_KEY . ' INT PRIMARY KEY AUTO_INCREMENT,' . implode( ',', $schema_values ) . ')' );
 					
 					foreach ( $schema_indexes as $field_name )
 					{
-						mysql_query( 'CREATE INDEX ' . ( $table_name . '_' . $field_name ) . ' ON ' . $table_name . ' (' . $field_name . ')' );
+						mysqli_query( $db, 'CREATE INDEX ' . ( $table_name . '_' . $field_name ) . ' ON ' . $table_name . ' (' . $field_name . ')' );
 					}
 				}
 				
@@ -257,11 +265,11 @@
 		global $db;
 		$return_val = NULL;
 		
-		$res = mysql_query( 'SELECT exp_id FROM experiments WHERE exp_name=' . db_quote_smart( strval( $exp_name ), $db ) );
+		$res = mysqli_query( $db, 'SELECT exp_id FROM experiments WHERE exp_name=' . db_quote_smart( strval( $exp_name ), $db ) );
 		
-		if ( mysql_num_rows( $res ) == 1 )
+		if ( mysqli_num_rows( $res ) == 1 )
 		{
-			$res = mysql_fetch_assoc( $res );
+			$res = mysqli_fetch_assoc( $res );
 			
 			$return_val = intval( $res['exp_id'] );
 		}
@@ -280,8 +288,8 @@
 		{
 			$return_val = array();
 			
-			$res = mysql_query( 'SELECT field_name, field_type FROM exp_schemas WHERE exp_id=' . db_quote_smart( $exp_id, $db ) . ' ORDER BY field_id ASC', $db );
-			while ( $row = mysql_fetch_assoc( $res ) )
+			$res = mysqli_query( $db, 'SELECT field_name, field_type FROM exp_schemas WHERE exp_id=' . db_quote_smart( $exp_id, $db ) . ' ORDER BY field_id ASC' );
+			while ( $row = mysqli_fetch_assoc( $res ) )
 			{
 				$return_val[ strval( $row['field_name'] ) ] = intval( $row['field_type'] );
 			}
@@ -299,7 +307,7 @@
 		_exp_drop_schema( $exp_id );
 		
 		// drop entry
-		mysql_query( 'DELETE FROM experiments WHERE exp_id=' . db_quote_smart( $exp_id, $db ), $db );
+		mysqli_query( $db, 'DELETE FROM experiments WHERE exp_id=' . db_quote_smart( $exp_id, $db ) );
 	}
 	
 	// return: experiment id on success, NULL on failure
@@ -325,8 +333,8 @@
 		global $db;
 		$return_val = array();
 		
-		$res = mysql_query( 'SELECT exp_id, exp_name FROM experiments ORDER BY exp_id ' . (($asc)?('ASC'):('DESC')), $db );
-		while ( $row = mysql_fetch_assoc( $res ) )
+		$res = mysqli_query( $db, 'SELECT exp_id, exp_name FROM experiments ORDER BY exp_id ' . (($asc)?('ASC'):('DESC')) );
+		while ( $row = mysqli_fetch_assoc( $res ) )
 		{
 			$return_val[ intval( $row['exp_id'] ) ] = strval( $row['exp_name'] );
 		}
@@ -369,9 +377,9 @@
 			{
 				$sql = ( 'INSERT INTO ' . _exp_table_name( $exp_id, false ) . ' (' . implode( ',', array_keys( $insert_values ) ) . ') VALUES (' . implode( ',', array_values( $insert_values ) ) . ')' );
 				
-				if ( mysql_query( $sql, $db ) )
+				if ( mysqli_query( $db, $sql ) )
 				{
-					$return_val = mysql_insert_id();
+					$return_val = mysqli_insert_id();
 				}
 			}
 		}
@@ -385,7 +393,7 @@
 		$exp_id = intval( $exp_id );
 			
 		// drop entry
-		mysql_query( 'DELETE FROM ' . _exp_table_name( $exp_id, false ), $db );
+		mysqli_query( $db, 'DELETE FROM ' . _exp_table_name( $exp_id, false ) );
 	}
 	
 	// return: number of data points, NULL if invalid experiment
@@ -397,8 +405,8 @@
 		
 		if ( _exp_valid( $exp_id ) )
 		{
-			$res = mysql_query( 'SELECT COUNT(*) AS exp_ct FROM ' . _exp_table_name( $exp_id, false ), $db );
-			$res = mysql_fetch_assoc( $res );
+			$res = mysqli_query( $db, 'SELECT COUNT(*) AS exp_ct FROM ' . _exp_table_name( $exp_id, false ) );
+			$res = mysqli_fetch_assoc( $res );
 			
 			$return_val = intval( $res['exp_ct'] );
 		}
@@ -461,10 +469,10 @@
 				}
 			}			
 			
-			$res = mysql_query( $modified_sql, $db );
+			$res = mysqli_query( $db, $modified_sql );
 			if ( $res === false )
 			{
-				$err = mysql_error( $db );
+				$err = mysqli_error( $db );
 			}
 			else
 			{
@@ -475,26 +483,26 @@
 				}
 				
 				$name_convert = array();
-				for ( $i=0; $i<mysql_num_fields( $res ); $i++ )
+				for ( $i=0; $i<mysqli_num_fields( $res ); $i++ )
 				{					
-					$field_name = mysql_field_name( $res, $i );
+					$field_name = mysqli_fetch_field_direct( $res, $i )->name;
 					
 					if ( $field_name != PRIMARY_KEY )
 					{
 						if ( isset( $rev_exp_schema[ $field_name ] ) )
 						{
-							$schema[ $rev_exp_schema[ $field_name ] ] = exp_sql_2_type( mysql_field_type( $res, $i ) );							
+							$schema[ $rev_exp_schema[ $field_name ] ] = exp_sql_2_type( mysqli_fetch_field_direct( $res, $i )->type );							
 							$name_convert[ $rev_exp_schema[ $field_name ] ] = $field_name;
 						}
 						else
 						{
-							$schema[ $field_name ] = exp_sql_2_type( mysql_field_type( $res, $i ) );
+							$schema[ $field_name ] = exp_sql_2_type( mysqli_fetch_field_direct( $res, $i )->type );
 							$name_convert[ $field_name ] = $field_name;
 						}						
 					}
 				}
 				
-				while ( $row = mysql_fetch_assoc( $res ) )
+				while ( $row = mysqli_fetch_assoc( $res ) )
 				{
 					$temp = array();
 					
